@@ -18,7 +18,7 @@ class RecipeController extends AbstractController
     //     // dd($request->attributes->get('slug'), $request->attributes->getInt("id"));
     //     // Si non, cette manièr mais il faut préciser dans le paramtre
     //     dd($slug, $id);
-    // }
+    // } 
     #[Route('/recette', name: 'recipe.index')]
     public function index(Request $request): Response
     {
