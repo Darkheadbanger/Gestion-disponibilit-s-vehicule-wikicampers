@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ReicipeController extends AbstractController
 {
-    #[Route('/recette', name: 'recip.index')]
+    #[Route('/recettes', name: 'recip.index')]
     public function index(Request $request): Response
     {
         return $this->render('reicipe/index.html.twig', [
