@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Toutes les recettes!
-{% endblock %}
+{% block title "Recette : " ~ slug %}
+{# {% block title %}Toutes les recettes!
+{% endblock %} #}
 
 {% block body %}
 	{{ slug }}
 	{{demo}}
+	{{person.name}}
+	{{person.name | upper ~ " " ~ person.age }}
 {% endblock %}

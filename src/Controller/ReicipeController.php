@@ -24,6 +24,10 @@ class ReicipeController extends AbstractController
             'slug' => $slug,
             'demo' => '<strong>demo</strong>',
             'id' => $id,
+            'person' => [
+                'name' => 'John',
+                'age' => 25
+            ]
         ]);
     }
 }
