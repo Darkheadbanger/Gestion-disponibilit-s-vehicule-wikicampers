@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VehiculeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
@@ -18,6 +20,17 @@ class Vehicule
 
     #[ORM\Column(length: 255)]
     private ?string $modele = null;
+
+    /**
+     * @var Collection<int, Disponibilite>
+     */
+    #[ORM\OneToMany(targetEntity: Disponibilite::class, mappedBy: 'vehicule')]
+    private Collection $disponibilities;
+
+    public function __construct()
+    {
+        $this->disponibilities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +57,36 @@ class Vehicule
     public function setModele(string $modele): static
     {
         $this->modele = $modele;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Disponibilite>
+     */
+    public function getDisponibilities(): Collection
+    {
+        return $this->disponibilities;
+    }
+
+    public function addDisponibility(Disponibilite $disponibility): static
+    {
+        if (!$this->disponibilities->contains($disponibility)) {
+            $this->disponibilities->add($disponibility);
+            $disponibility->setVehicule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDisponibility(Disponibilite $disponibility): static
+    {
+        if ($this->disponibilities->removeElement($disponibility)) {
+            // set the owning side to null (unless already changed)
+            if ($disponibility->getVehicule() === $this) {
+                $disponibility->setVehicule(null);
+            }
+        }
 
         return $this;
     }
