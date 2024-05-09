@@ -30,6 +30,9 @@ class Disponibilite
     #[ORM\Column]
     private ?bool $isDisponible = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
 
     public function getId(): ?int
     {
@@ -94,6 +97,18 @@ class Disponibilite
     public function setDisponible(bool $isDisponible): static
     {
         $this->isDisponible = $isDisponible;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
