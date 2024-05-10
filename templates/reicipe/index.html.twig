@@ -28,6 +28,10 @@
 	<p>Lorem Ipsum
 	</p>
 	<ul>
-		<li><a href="{{ url('recip.show', {id: 32, slug: 'pate-bolognaise'}) }}">Pate bolognaise</a></li>
+		{% for recipe in recipes %}
+			<li>
+				<a href="{{ url('recip.show', {id: recipe.id, slug: recipe.slug}) }}">{{ recipe.title }}</a>
+			</li>
+		{% endfor %}
 	</ul>
 {% endblock %}
