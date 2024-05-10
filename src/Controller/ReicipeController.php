@@ -3,18 +3,43 @@
 namespace App\Controller;
 
 use App\Repository\RecipeRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+// Use Class Recipe from entity Recipe.php
+use app\entity\Recipe;
 
 class ReicipeController extends AbstractController
 {
     #[Route('/recettes', name: 'recip.index')]
-    public function index(Request $request, RecipeRepository $repository): Response
+    public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em): Response
     {
-        $recipes = $repository->findAll();
-        // $recipes = $repository->findWithDurationLowerThan(20);
+        // $recipes = $repository->findAll();
+        // Ici pour afficher la somme des durées total
+        // Donc on peut récuperer la function directement
+        // dd($repository->findTotalDuration());
+        // Ici pour modifier un titre
+        // $recipes[0]->setTitle('Pâtes bolognaise');
+        // $em->flush();
+        // Ici pour chercher les recettes avec une durée inférieure à 20 minutes
+        $recipes = $repository->findWithDurationLowerThan(15);
+        // Ici pour ajouter une recette
+        // $recipe = new Recipe();
+        // $recipe->setTitle('Barbe à papa')
+        //     ->setSlug('barbe-a-papa')
+        //     ->setContent('Dessert')
+        //     ->setCreatedAt(new \DateTimeImmutable())
+        //     ->setUpdatedAt(new \DateTimeImmutable())
+        //     ->setDuration("2 Minutes");
+        // $em->persist($recipe);
+        // $em->flush();
+        // Ici pour supprimer une recette
+        // $em->remove($recipes[0]);
+        // $em->flush();
+
         return $this->render('reicipe/index.html.twig', [
             'recipes' => $recipes, 'controller_name' => 'ReicipeController',
         ]);

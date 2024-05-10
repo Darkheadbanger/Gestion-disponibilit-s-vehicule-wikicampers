@@ -23,7 +23,17 @@ class RecipeRepository extends ServiceEntityRepository
             ->orderBy('r.duration', 'ASC')
             ->setMaxResults(10)
             ->setParameter('duration', $duration)
-            ->getQuery();
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTotalDuration()
+    {
+        return (int)$this->createQueryBuilder('r')
+            ->select('SUM(r.duration) as total')
+            ->getQuery()
+            // ->getResult()
+            ->getSingleScalarResult();
     }
 
     //    /**
