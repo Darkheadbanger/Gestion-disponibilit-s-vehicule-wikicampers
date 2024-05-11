@@ -25,10 +25,10 @@
 						</td>
 						<td>
 							<a class="btn btn-primary" href="{{ url('vehicule.edit', {id: vehicule.id}) }}">Editer</a>
-							{# <form action="{{ path('recip.delete', {id: recipe.id})}}" method="post" style="display: inline-block">
+							<form action="{{ path('vehicule.delete', {id: vehicule.id})}}" method="post" style="display: inline-block">
 								<input type="hidden" name="_method" value="DELETE">
 								<button class="btn btn-danger" type="submit">Supprimer</button>
-							</form> #}
+							</form>
 						</td> 
 					</tr>
 				{% endfor %}

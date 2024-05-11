@@ -41,7 +41,7 @@ class VehiculeController extends AbstractController
     }
 
     // Ici la route pour editer un vehicule
-    #[Route('/vehicule/{id}/edit', name: 'vehicule.edit', methods: ['GET', 'POST'])]
+    #[Route('/vehicules/{id}/edit', name: 'vehicule.edit', methods: ['GET', 'POST'])]
     public function edit(Vehicule $vehicule, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(VehiculeType::class, $vehicule);
@@ -61,7 +61,7 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/vehicule/create', name: 'vehicule.create')]
+    #[Route('/vehicules/create', name: 'vehicule.create')]
     public function create(Request $request, EntityManagerInterface $em, VehiculeRepository $repository): Response
     {
         $vehicule = new Vehicule();
@@ -81,21 +81,18 @@ class VehiculeController extends AbstractController
             $this->addFlash('success', 'La vehicule a été créée avec succès');
             return $this->redirectToRoute('vehicule.index');
         }
-        return $this->render('reicipe/create.html.twig', [
+        return $this->render('vehicule/create.html.twig', [
             'controller_name' => 'VehiculeController',
             'form' => $form,
         ]);
     }
 
-    // #[Route('/vehicule/delete/{id}', name: 'vehicule.delete', methods: ['POST'])]
-    // public function delete(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete' . $vehicule->getId(), $request->request->get('_token'))) {
-    //         $em->remove($vehicule);
-    //         $em->flush();
-    //         $this->addFlash('success', 'Véhicule supprimé avec succès!');
-    //     }
-
-    //     return $this->redirectToRoute('vehicule.index');
-    // }
+    #[Route('/vehicules/{id}', name: 'vehicule.delete', methods: ['DELETE'])]
+    public function remove(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
+    {
+        $em->remove($vehicule);
+        $em->flush();
+        $this->addFlash('success', 'La recette a été supprimée avec succès');
+        return $this->redirectToRoute('vehicule.index');
+    }
 }

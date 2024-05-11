@@ -7,6 +7,7 @@ use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,8 +32,9 @@ class VehiculeType extends AbstractType
             ->add('modele', TextareaType::class, [
                 'empty_data' => '',
             ])
-            ->add('slug', TextType::class, [
+            ->add('slug', HiddenType::class, [
                 'required' => false,
+
             ])
 
             // ->add('createdAt', null, [
