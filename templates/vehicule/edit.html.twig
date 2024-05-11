@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Recette : "  %}
+
+
+{% block body %}
+	<h1>{{ vehicule.marque}}</h1>
+
+	{{ form_start(form) }}
+	<div class="d-flex">
+		{{ form_row(form.marque) }}
+		{{ form_row(form.modele) }}
+	</div>
+	{{ form_rest(form) }}
+	{{ form_end(form) }}
+{% endblock %}

@@ -2,68 +2,90 @@
 
 namespace App\Controller;
 
+use App\Form\VehiculeType;
+use App\Repository\RecipeRepository;
+use App\Repository\VehiculeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-
-use App\Repository\VehiculeRepository;
-
-
+use App\Entity\Vehicule;
 
 class VehiculeController extends AbstractController
 {
-
-    #[Route('/vehicule', name: 'vehicule.index')]
-    public function index(Request $request, VehiculeRepository $repository, EntityManagerInterface $em): Response
+    #[Route('/vehicules', name: 'vehicule.index')]
+    public function index(VehiculeRepository $repository): Response
     {
-        // $recipes = $repository->findAll();
-        // Ici pour afficher la somme des durées total
-        // Donc on peut récuperer la function directement
-        // dd($repository->findTotalDuration());
-        // Ici pour modifier un titre
-        // $recipes[0]->setTitle('Pâtes bolognaise');
-        // $em->flush();
-        // Ici pour chercher les recettes avec une durée inférieure à 20 minutes
-        $recipes = $repository->findWithDurationLowerThan(15);
-        // Ici pour ajouter une recette
-        // $recipe = new Recipe();
-        // $recipe->setTitle('Barbe à papa')
-        //     ->setSlug('barbe-a-papa')
-        //     ->setContent('Dessert')
-        //     ->setCreatedAt(new \DateTimeImmutable())
-        //     ->setUpdatedAt(new \DateTimeImmutable())
-        //     ->setDuration("2 Minutes");
-        // $em->persist($recipe);
-        // $em->flush();
-        // Ici pour supprimer une recette
-        // $em->remove($recipes[0]);
-        // $em->flush();
-        return $this->render('vehicule/index.html.twig', [
+        $vehicules = $repository->findAll();
+        return $this->render(
+            'vehicule/index.html.twig',
+            [
+                'vehicules' => $vehicules,
+                'controller_name' => 'VehiculeController'
+            ]
+        );
+    }
+
+    #[Route('/vehicules/{slug}-{id}', name: 'vehicule.show', requirements: ['id' => '\d+', "slug" => "[a-z0-9\-_]+"])]
+    public function show(Request $request, string $slug, int $id, VehiculeRepository $repository): Response
+    {
+        $vehicule = $repository->find($id);
+        // if ($vehicule->getSlug() !== $slug) {
+        //     return $this->redirectToRoute("vehicule.show", ["slug" => $vehicule->getSlug(), 'id' => $vehicule->getId()]);
+        // }
+        return $this->render('vehicule/show.html.twig', [
             'controller_name' => 'VehiculeController',
+            'vehicule' => $vehicule,
         ]);
     }
 
-    #[Route('/vehicule/{slug}-{id}', name: 'vehicule.show', requirements: ['id' => '\d+', "slug" => "[a-z0-9\-_]+"])]
-    public function show(Request $request, string $slug, int $id, VehiculeRepository $repository)
+
+
+    #[Route('/vehicule/{id}/edit', name: 'vehicule.edit', methods: ['GET', 'POST'])]
+    public function edit(Vehicule $vehicule, Request $request, EntityManagerInterface $em): Response
     {
-        // $recipe = $repository->find($id);
-        // if ($recipe->getSlug() !== $slug) {
-        //     return $this->redirectToRoute("recipe.show", ["slug" => $recipe->getSlug(), 'id' => $recipe->getId()]);
-        // }
-        // return $this->render('reicipe/show.html.twig', [
-        //     'controller_name' => 'ReicipeController',
-        //     // 'slug' => $slug,
-        //     // 'demo' => '<strong>demo</strong>',
-        //     // 'id' => $id,
-        //     // 'person' => [
-        //     //     'name' => 'John',
-        //     //     'age' => 25
-        //     // ],
-        //     'recipe' => $recipe,
-        // ]);
+        $form = $this->createForm(VehiculeType::class, $vehicule);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $vehicule->setCreatedAt(new \DateTimeImmutable());
+            // $vehicule->setUpdatedAt(new \DateTimeImmutable());
+            $em->flush();
+            $this->addFlash('success', 'La voiture a été modifiée avec succès');
+            return $this->redirectToRoute('vehicule.index');
+        }
+        // dd($recipe);
+        return $this->render('vehicule/edit.html.twig', [
+            'controller_name' => 'VehiculeController',
+            'vehicule' => $vehicule,
+            'form' => $form,
+        ]);
     }
+
+    // #[Route('/vehicule/edit/{id}', name: 'vehicule.edit', methods: ['GET', 'POST'])]
+    // public function edit(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
+    // {
+    //     $form = $this->createForm(VehiculeType::class, $vehicule);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em->flush();
+    //         $this->addFlash('success', 'Véhicule mis à jour avec succès!');
+    //         return $this->redirectToRoute('vehicule.index');
+    //     }
+
+    //     return $this->render('vehicule/edit.html.twig', ['form' => $form->createView(), 'vehicule' => $vehicule]);
+    // }
+
+    // #[Route('/vehicule/delete/{id}', name: 'vehicule.delete', methods: ['POST'])]
+    // public function delete(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete' . $vehicule->getId(), $request->request->get('_token'))) {
+    //         $em->remove($vehicule);
+    //         $em->flush();
+    //         $this->addFlash('success', 'Véhicule supprimé avec succès!');
+    //     }
+
+    //     return $this->redirectToRoute('vehicule.index');
+    // }
 }

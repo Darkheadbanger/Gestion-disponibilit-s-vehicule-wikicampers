@@ -23,6 +23,8 @@
 					{# Home est  #}
 						<a class="navbar-brand {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ url("home") }}"> Accueil</a>
 					<a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.index") }}">Recette</a>
+					{# Pour vehicule #}
+					<a class="navbar-brand {{ app.current_route starts with 'vehicule.' ? 'active' : '' }}" href="{{ url("vehicule.index") }}">Vehicule</a>
 					{# <a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.edit") }}">Formulaire</a> #}
 				</div>
 			</div>

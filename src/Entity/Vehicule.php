@@ -6,8 +6,11 @@ use App\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
+
 class Vehicule
 {
     #[ORM\Id]
@@ -16,9 +19,12 @@ class Vehicule
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3)]
+
     private ?string $marque = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3)]
     private ?string $modele = null;
 
     /**
@@ -28,7 +34,11 @@ class Vehicule
     private Collection $disponibilities;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    #[Assert\Regex(
+        '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+        message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets.'
+    )]
+    private ?string $slug = "";
 
     public function __construct()
     {
