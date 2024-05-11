@@ -16,15 +16,21 @@
 		{% endblock %}
 	</head>
 	<body>
-		<div class="navbar bg-body-tertiary">
-			<div class="container-fluide">
-				{# Href redirection une autre page: ici #}
-				{# Home est  #}
-					<a class="navbar-brand {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ url("home") }}"> Accueil</a>
-				<a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.index") }}">Recette</a>
+		<nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
+			<div class="navbar bg-body-tertiary">
+				<div class="container-fluide">
+					{# Href redirection une autre page: ici #}
+					{# Home est  #}
+						<a class="navbar-brand {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ url("home") }}"> Accueil</a>
+					<a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.index") }}">Recette</a>
+					{# <a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.edit") }}">Formulaire</a> #}
+				</div>
 			</div>
+		</nav>
+		<div class="container my-4">
+			{% include 'partials/flash.html.twig' %}
+			{{ dump(app.flashes) }}
+			{% block body %}{% endblock %}
 		</div>
-		<div class="container my-4"> {% block body %}{% endblock %}
-			</div>
-		</body>
-	</html>
+	</body>
+</html>

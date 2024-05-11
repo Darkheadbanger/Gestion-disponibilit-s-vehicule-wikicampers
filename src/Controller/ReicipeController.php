@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 use Symfony\Component\HttpFoundation\Request;
 // Use Class Recipe from entity Recipe.php
-use app\entity\Recipe;
+use App\Entity\Recipe;
 
 class ReicipeController extends AbstractController
 {
@@ -51,7 +52,7 @@ class ReicipeController extends AbstractController
     {
         $recipe = $repository->find($id);
         if ($recipe->getSlug() !== $slug) {
-            return $this->redirectToRoute("recipe.show", ["slug" => $recipe->getSlug(), 'id' => $recipe->getId()]);
+            return $this->redirectToRoute("reicipe.show", ["slug" => $recipe->getSlug(), 'id' => $recipe->getId()]);
         }
         return $this->render('reicipe/show.html.twig', [
             'controller_name' => 'ReicipeController',
@@ -64,5 +65,24 @@ class ReicipeController extends AbstractController
             // ],
             'recipe' => $recipe,
         ]);
+    }
+
+    #[Route('/recettes/{id}/edit', name: 'recip.edit')]
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success','La recett a été modifiée avec succès');
+            return $this->redirectToRoute('recip.index');
+        }
+        // dd($recipe);
+        return $this->render('reicipe/edit.html.twig', [
+            'controller_name' => 'ReicipeController',
+            'recipe' => $recipe,
+            'form' => $form,
+        ]);
+
     }
 }
