@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block title "Creer une nouvelle vehicule "  %}
 
@@ -6,4 +6,10 @@
 {% block body %}
 	<h1>Creer une nouvelle vechicule</h1>
 
-	{{ form(form) }}{% endblock %}
+	{{ form_start(form) }}
+	<div class="d-flex">
+		{{ form_row(form.marque) }}
+		{{ form_row(form.modele) }}
+	</div>
+ 	{{ form_end(form) }}
+{% endblock %} #}
