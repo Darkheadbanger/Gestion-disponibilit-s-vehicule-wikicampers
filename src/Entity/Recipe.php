@@ -31,7 +31,6 @@ class Recipe
         '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
         message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets.'
     )]
-
     private ?string $slug = "";
 
     #[ORM\Column(type: Types::TEXT)]

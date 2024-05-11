@@ -40,8 +40,7 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-
-
+    // Ici la route pour editer un vehicule
     #[Route('/vehicule/{id}/edit', name: 'vehicule.edit', methods: ['GET', 'POST'])]
     public function edit(Vehicule $vehicule, Request $request, EntityManagerInterface $em): Response
     {
@@ -62,20 +61,31 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    // #[Route('/vehicule/edit/{id}', name: 'vehicule.edit', methods: ['GET', 'POST'])]
-    // public function edit(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
-    // {
-    //     $form = $this->createForm(VehiculeType::class, $vehicule);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $em->flush();
-    //         $this->addFlash('success', 'Véhicule mis à jour avec succès!');
-    //         return $this->redirectToRoute('vehicule.index');
-    //     }
-
-    //     return $this->render('vehicule/edit.html.twig', ['form' => $form->createView(), 'vehicule' => $vehicule]);
-    // }
+    #[Route('/vehicule/create', name: 'vehicule.create')]
+    public function create(Request $request, EntityManagerInterface $em, VehiculeRepository $repository): Response
+    {
+        $vehicule = new Vehicule();
+        $form = $this->createForm(VehiculeType::class, $vehicule);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $existingRecipe = $repository->findMarqueAndModele($vehicule->getMarque(), $vehicule->getModele());
+            if ($existingRecipe) {
+                $em->persist($vehicule);
+                $this->addFlash('danger', 'La voiture existe déjà');
+                return $this->redirectToRoute('vehicule.index');
+            }
+            // $vehicul->setCreatedAt(new \DateTimeImmutable());
+            // $vehicul->setUpdatedAt(new \DateTimeImmutable());
+            $em->persist($vehicule);
+            $em->flush();
+            $this->addFlash('success', 'La vehicule a été créée avec succès');
+            return $this->redirectToRoute('vehicule.index');
+        }
+        return $this->render('reicipe/create.html.twig', [
+            'controller_name' => 'VehiculeController',
+            'form' => $form,
+        ]);
+    }
 
     // #[Route('/vehicule/delete/{id}', name: 'vehicule.delete', methods: ['POST'])]
     // public function delete(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
