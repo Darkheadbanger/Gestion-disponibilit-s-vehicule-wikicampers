@@ -20,7 +20,7 @@ class ReicipeController extends AbstractController
     #[Route('/recettes', name: 'recip.index')]
     public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em): Response
     {
-        // $recipes = $repository->findAll();
+        $recipes = $repository->findAll();
         // Ici pour afficher la somme des durées total
         // Donc on peut récuperer la function directement
         // dd($repository->findTotalDuration());
@@ -28,7 +28,7 @@ class ReicipeController extends AbstractController
         // $recipes[0]->setTitle('Pâtes bolognaise');
         // $em->flush();
         // Ici pour chercher les recettes avec une durée inférieure à 20 minutes
-        $recipes = $repository->findWithDurationLowerThan(15);
+        // $recipes = $repository->findWithDurationLowerThan(15);
         // Ici pour ajouter une recette
         // $recipe = new Recipe();
         // $recipe->setTitle('Barbe à papa')
@@ -88,12 +88,18 @@ class ReicipeController extends AbstractController
     }
 
     #[Route('/recettes/create', name: 'recip.create')]
-    public function create(Request $request, EntityManagerInterface $em)
+    public function create(Request $request, EntityManagerInterface $em, RecipeRepository $repository)
     {
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $existingRecipe = $repository->findTitleAndContent($recipe->getTitle(), $recipe->getContent());
+            if ($existingRecipe) {
+                $em->persist($recipe);
+                $this->addFlash('danger', 'La recette existe déjà');
+                return $this->redirectToRoute('recip.index');
+            }
             $recipe->setCreatedAt(new \DateTimeImmutable());
             $recipe->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($recipe);

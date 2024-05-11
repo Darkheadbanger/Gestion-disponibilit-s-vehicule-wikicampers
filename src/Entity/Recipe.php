@@ -3,10 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\RecipeRepository;
+use App\Validator\BanWord;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
+#[UniqueEntity('title')]
+#[UniqueEntity('slug')]
 class Recipe
 {
     #[ORM\Id]
@@ -15,10 +20,19 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[Assert\Length(min: 3)]
+    #[BanWord()]
+    // #[BanWord(groups:['Extra'])] groups xtra permet d'exclure le banWord
+    private ?string $title = "";
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    #[Assert\Length(min: 3)]
+    #[Assert\Regex(
+        '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+        message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets.'
+    )]
+
+    private ?string $slug = "";
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
@@ -30,6 +44,9 @@ class Recipe
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Positive(message: "La durée doit être un nombre positif.")]
+    #[Assert\NotBlank()]
+    #[Assert\LessThan(value: 1440, message: "La durée doit être inférieure à 24 heures.")]
     private ?string $duration = null;
 
     public function getId(): ?int
@@ -37,7 +54,7 @@ class Recipe
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -49,7 +66,7 @@ class Recipe
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -61,7 +78,7 @@ class Recipe
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }

@@ -36,6 +36,16 @@ class RecipeRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function findTitleAndContent(string $title, string $content)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.title = :title AND r.content = :content')
+            ->setParameter('title', $title)
+            ->setParameter('content', $content)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Recipe[] Returns an array of Recipe objects
     //     */
