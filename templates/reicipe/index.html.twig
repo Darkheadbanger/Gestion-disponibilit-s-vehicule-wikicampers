@@ -27,6 +27,9 @@
 
 	<p>Lorem Ipsum
 	</p>
+	<p>
+		<a class="btn btn-primary" href="{{ url('recip.create') }}">Créer une nouvelle recette</a>
+	</p>
 	<table class='table'>
 		<thead>
 			<tr>
@@ -43,6 +46,10 @@
 						</td>
 						<td>
 							<a class="btn btn-primary" href="{{ url('recip.edit', {id: recipe.id}) }}">Editer</a>
+							<form action="{{ path('recip.delete', {id: recipe.id})}}" method="post" style="display: inline-block">
+								<input type="hidden" name="_method" value="DELETE">
+								<button class="btn btn-danger" type="submit">Supprimer</button>
+							</form>
 						</td>
 					</tr>
 				{% endfor %}
