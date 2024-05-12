@@ -19,6 +19,9 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class RecipeType extends AbstractType
 {
+    public function __construct(private FormListenerFactory $factory)
+    {
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -43,33 +46,11 @@ class RecipeType extends AbstractType
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer'
             ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimesStamp(...));
+            ->addEventListener(FormEvents::PRE_SUBMIT, $this->factory->autoSlug('title'))
+            ->addEventListener(FormEvents::POST_SUBMIT, $this->factory->timestamp());
     }
 
-    public function autoSlug(PreSubmitEvent $event)
-    {
-        $data = $event->getData();
-        if (empty($data['slug'])) {
-            $slugger = new AsciiSlugger();
-            $data['slug'] = strtolower($slugger->slug($data['title']));
-            $event->setData($data);
-        }
 
-        // dd($event->getData());
-    }
-
-    public function attachTimesStamp(PostSubmitEvent $event): void
-    {
-        $data = $event->getData();
-        if (!($data instanceof Recipe)) {
-            return;
-        }
-        $data->setUpdatedAt(new \DateTimeImmutable());
-        if (!$data->getId()) {
-            $data->setCreatedAt(new \DateTimeImmutable());
-        }
-    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

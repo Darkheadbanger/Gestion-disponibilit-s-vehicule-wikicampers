@@ -27,6 +27,8 @@
 					{# Pour vehicule #}
 					<a class="navbar-brand {{ app.current_route starts with 'admin.vehicule.' ? 'active' : '' }}" href="{{ url("admin.vehicule.index") }}">Vehicule</a>
 					{# <a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.edit") }}">Formulaire</a> #}
+					<a class="navbar-brand {{ app.current_route starts with 'admin.category.' ? 'active' : '' }}" href="{{ url("admin.category.index") }}">Category</a>
+
 				</div>
 			</div>
 		</nav>
