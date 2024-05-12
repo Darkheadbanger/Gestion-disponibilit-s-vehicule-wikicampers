@@ -7,10 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
-
 class Vehicule
 {
     #[ORM\Id]
@@ -20,10 +20,9 @@ class Vehicule
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 3)]
-
     private ?string $marque = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, type: Types::TEXT)]
     #[Assert\Length(min: 3)]
     private ?string $modele = null;
 
@@ -39,6 +38,9 @@ class Vehicule
         message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets.'
     )]
     private ?string $slug = "";
+
+    #[ORM\ManyToOne(inversedBy: 'vehicules', cascade: ['persist'])]
+    private ?Disponibilite $disponibilite = null;
 
     public function __construct()
     {
@@ -112,6 +114,18 @@ class Vehicule
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getDisponibilite(): ?Disponibilite
+    {
+        return $this->disponibilite;
+    }
+
+    public function setDisponibilite(?Disponibilite $disponibilite): static
+    {
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }

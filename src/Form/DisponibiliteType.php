@@ -32,8 +32,9 @@ class DisponibiliteType extends AbstractType
                 'required' => true,
                 'scale' => 2,
             ])
-            ->add('isDisponible', CheckboxType ::class, [
+            ->add('isDisponible', CheckboxType::class, [
                 'required' => true,
+                // 'label' => 'Disponible ?',
             ])
             ->add('slug', HiddenType::class, [
                 'required' => false,

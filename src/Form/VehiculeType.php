@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Disponibilite;
 use App\Entity\Recipe;
 use App\Entity\Vehicule;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -39,7 +41,13 @@ class VehiculeType extends AbstractType
             ->add('slug', HiddenType::class, [
                 'required' => false,
             ])
-
+            // Ici pour lier category de la recette
+            ->add('disponibilite', EntityType::class, [
+                'class' => Disponibilite::class,
+                // Vehicule je ne sais pas on verra
+                'choice_label' => 'vehicule',
+                'expanded' => true,
+            ])
             // ->add('createdAt', null, [
             //     'widget' => 'single_text',
             // ])

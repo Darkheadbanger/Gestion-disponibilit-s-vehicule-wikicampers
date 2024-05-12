@@ -42,6 +42,7 @@ class RecipeRepository extends ServiceEntityRepository
             ->where('r.title = :title AND r.content = :content')
             ->setParameter('title', $title)
             ->setParameter('content', $content)
+            ->leftJoin('r.category', 'c')
             ->getQuery()
             ->getOneOrNullResult();
     }

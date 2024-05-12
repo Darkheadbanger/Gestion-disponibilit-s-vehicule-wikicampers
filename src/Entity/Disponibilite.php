@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DisponibiliteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,6 +44,18 @@ class Disponibilite
         message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets.'
     )]
     private ?string $slug = null;
+
+    /**
+     * @var Collection<int, Vehicule>
+     */
+    // #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'disponibilite', cascade: 'remove')]
+    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'disponibilite')]
+    private Collection $vehicules;
+
+    public function __construct()
+    {
+        $this->vehicules = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -119,6 +133,36 @@ class Disponibilite
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vehicule>
+     */
+    public function getVehicules(): Collection
+    {
+        return $this->vehicules;
+    }
+
+    public function addVehicule(Vehicule $vehicule): static
+    {
+        if (!$this->vehicules->contains($vehicule)) {
+            $this->vehicules->add($vehicule);
+            $vehicule->setDisponibilite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicule(Vehicule $vehicule): static
+    {
+        if ($this->vehicules->removeElement($vehicule)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicule->getDisponibilite() === $this) {
+                $vehicule->setDisponibilite(null);
+            }
+        }
 
         return $this;
     }

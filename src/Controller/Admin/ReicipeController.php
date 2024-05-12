@@ -8,6 +8,7 @@ use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
+use Proxies\__CG__\App\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,6 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 // Use Class Recipe from entity Recipe.php
 use App\Entity\Recipe;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/admin/recettes', name: 'admin.recip.')]
 class ReicipeController extends AbstractController
@@ -23,6 +25,18 @@ class ReicipeController extends AbstractController
     public function index(Request $request, RecipeRepository $repository, CategoryRepository $categoryRepository, EntityManagerInterface $em): Response
     {
         $recipes = $repository->findAll();
+        $slugger = new AsciiSlugger();
+        $category = (new Category())
+            ->setUpdatedAt(new \DateTimeImmutable())
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setName('Demo');
+        $slug = $slugger->slug($category->getName())->lower();
+        $category->setSlug($slug);
+
+        $em->persist($category);
+        $recipes[0]->setCategory($category);
+        $em->flush();
+
         // dd($recipes[1]->getCategory()->getName()); // PLat principlae
         // Ici pour afficher la somme des durées total
         // Donc on peut récuperer la function directement

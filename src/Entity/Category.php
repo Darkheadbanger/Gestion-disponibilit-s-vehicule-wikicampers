@@ -41,6 +41,7 @@ class Category
     /**
      * @var Collection<int, Recipe>
      */
+    // #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'category', cascade: ['remove'])]
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'category')]
     private Collection $recipes;
 
