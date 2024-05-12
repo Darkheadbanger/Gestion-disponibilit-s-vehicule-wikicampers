@@ -42,10 +42,10 @@ class CategoryController extends AbstractController
             'form' => $form,
         ]);
     }
-    #[Route(path: '/id', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
+    #[Route(path: '/{id}', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     public function edit(Category $category, Request $request, EntityManagerInterface $em)
     {
-        $category = new Category();
+        // $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

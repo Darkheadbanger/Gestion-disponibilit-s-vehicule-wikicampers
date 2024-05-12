@@ -1,0 +1,37 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Les disponibilites!
+{% endblock %}
+
+{% block body %}
+	<p>
+		<a class="btn btn-primary" href="{{ url('admin.disponibilite.create') }}">Créer une catégorie</a>
+	</p>
+	<table class='table'>
+		<thead>
+			<tr>
+				<th>Titre</th>
+				<th style="style: 200px">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<ul>
+				{% for disponibilite in disponibilites %}
+					<tr>
+						<td>
+							{# <a href="{{ url('admin.disponibilite.show', {id: category.id, slug: category.slug}) }}">{{ category.name }}</a> #}
+							{# <p>{{ disponibilite.name }}</p> #}
+							<p>La catégorie de cette voiture</p>
+						</td>
+						{# <td>
+							<a class="btn btn-primary" href="{{ url('admin.disponibilite.edit', {id: disponibilite.id}) }}">Editer</a>
+							<form action="{{ path('admin.disponibilite.delete', {id: category.id})}}" method="post" style="display: inline-block">
+								<input type="hidden" name="_method" value="DELETE">
+								<button class="btn btn-danger" type="submit">Supprimer</button>
+							</form>
+						</td> #}
+					</tr>
+				{% endfor %}
+			</ul>
+		</tbody>
+	</table>
+{% endblock %}

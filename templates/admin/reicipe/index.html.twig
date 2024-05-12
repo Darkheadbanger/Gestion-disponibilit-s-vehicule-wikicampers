@@ -4,8 +4,7 @@
 
 {% block body %}
 
-	<p>
-	</p>
+	<p></p>
 	<p>
 		<a class="btn btn-primary" href="{{ url('admin.recip.create') }}">Créer une nouvelle recette</a>
 	</p>
@@ -13,6 +12,7 @@
 		<thead>
 			<tr>
 				<th>Titre</th>
+				<th>Categorie</th>
 				<th>Action</th>
 			</tr>
 		</thead>
@@ -22,6 +22,8 @@
 					<tr>
 						<td>
 							<a href="{{ url('admin.recip.show', {id: recipe.id, slug: recipe.slug}) }}">{{ recipe.title }}</a>
+						</td>
+						<td>{{ recipe.category.name | default('') }}
 						</td>
 						<td>
 							<a class="btn btn-primary" href="{{ url('admin.recip.edit', {id: recipe.id}) }}">Editer</a>

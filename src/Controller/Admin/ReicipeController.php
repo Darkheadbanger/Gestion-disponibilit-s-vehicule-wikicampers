@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Form\RecipeType;
+use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,9 +20,10 @@ use App\Entity\Recipe;
 class ReicipeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em): Response
+    public function index(Request $request, RecipeRepository $repository, CategoryRepository $categoryRepository, EntityManagerInterface $em): Response
     {
         $recipes = $repository->findAll();
+        // dd($recipes[1]->getCategory()->getName()); // PLat principlae
         // Ici pour afficher la somme des durées total
         // Donc on peut récuperer la function directement
         // dd($repository->findTotalDuration());

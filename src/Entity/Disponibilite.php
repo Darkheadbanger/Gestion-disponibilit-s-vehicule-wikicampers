@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\DisponibiliteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DisponibiliteRepository::class)]
 class Disponibilite
@@ -25,12 +26,21 @@ class Disponibilite
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column]
+    #[Assert\Regex(
+        '/^\d*\.?\d+$/',
+        message: 'Le prix par jour ne peut qu\'être positive.'
+    )]
     private ?float $prixParJour = null;
 
     #[ORM\Column]
     private ?bool $isDisponible = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3)]
+    #[Assert\Regex(
+        '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+        message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets.'
+    )]
     private ?string $slug = null;
 
 

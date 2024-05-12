@@ -25,11 +25,16 @@
 						</td>
 						<td>
 							<a class="btn btn-primary" href="{{ url('admin.vehicule.edit', {id: vehicule.id}) }}">Editer</a>
+							
+							
+							<a class="btn btn-secondary {{ app.current_route starts with 'admin.disponibilite.' ? 'active' : '' }}" href="{{ url("admin.disponibilite.create") }}">Disponibilite</a>
+							
+							
 							<form action="{{ path('admin.vehicule.delete', {id: vehicule.id})}}" method="post" style="display: inline-block">
 								<input type="hidden" name="_method" value="DELETE">
 								<button class="btn btn-danger" type="submit">Supprimer</button>
 							</form>
-						</td> 
+						</td>
 					</tr>
 				{% endfor %}
 			</ul>
