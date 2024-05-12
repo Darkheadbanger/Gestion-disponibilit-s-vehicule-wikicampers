@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
@@ -15,9 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
 // Use Class Recipe from entity Recipe.php
 use App\Entity\Recipe;
 
+#[Route('/admin/recettes', name: 'admin.recip.')]
 class ReicipeController extends AbstractController
 {
-    #[Route('/recettes', name: 'recip.index')]
+    #[Route('/', name: 'index')]
     public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em): Response
     {
         $recipes = $repository->findAll();
@@ -43,18 +44,18 @@ class ReicipeController extends AbstractController
         // $em->remove($recipes[0]);
         // $em->flush();
 
-        return $this->render('reicipe/index.html.twig', [
+        return $this->render('admin/reicipe/index.html.twig', [
             'recipes' => $recipes, 'controller_name' => 'ReicipeController',
         ]);
     }
-    #[Route('/recette/{slug}-{id}', name: 'recip.show', requirements: ['id' => '\d+', "slug" => "[a-z0-9\-_]+"])]
+    #[Route('/{slug}-{id}', name: 'show', requirements: ['id' => '\d+', "slug" => "[a-z0-9\-_]+"])]
     public function show(Request $request, string $slug, int $id, RecipeRepository $repository): Response
     {
         $recipe = $repository->find($id);
         if ($recipe->getSlug() !== $slug) {
-            return $this->redirectToRoute("reicipe.show", ["slug" => $recipe->getSlug(), 'id' => $recipe->getId()]);
+            return $this->redirectToRoute("admin.reicipe.show", ["slug" => $recipe->getSlug(), 'id' => $recipe->getId()]);
         }
-        return $this->render('reicipe/show.html.twig', [
+        return $this->render('admin/reicipe/show.html.twig', [
             'controller_name' => 'ReicipeController',
             // 'slug' => $slug,
             // 'demo' => '<strong>demo</strong>',
@@ -67,7 +68,7 @@ class ReicipeController extends AbstractController
         ]);
     }
 
-    #[Route('/recettes/{id}/edit', name: 'recip.edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(RecipeType::class, $recipe);
@@ -77,17 +78,17 @@ class ReicipeController extends AbstractController
             $recipe->setUpdatedAt(new \DateTimeImmutable());
             $em->flush();
             $this->addFlash('success', 'La recett a été modifiée avec succès');
-            return $this->redirectToRoute('recip.index');
+            return $this->redirectToRoute('admin.recip.index');
         }
         // dd($recipe);
-        return $this->render('reicipe/edit.html.twig', [
+        return $this->render('admin/reicipe/edit.html.twig', [
             'controller_name' => 'ReicipeController',
             'recipe' => $recipe,
             'form' => $form,
         ]);
     }
 
-    #[Route('/recettes/create', name: 'recip.create')]
+    #[Route('/create', name: 'create')]
     public function create(Request $request, EntityManagerInterface $em, RecipeRepository $repository)
     {
         $recipe = new Recipe();
@@ -98,27 +99,27 @@ class ReicipeController extends AbstractController
             if ($existingRecipe) {
                 $em->persist($recipe);
                 $this->addFlash('danger', 'La recette existe déjà');
-                return $this->redirectToRoute('recip.index');
+                return $this->redirectToRoute('admin.recip.index');
             }
             $recipe->setCreatedAt(new \DateTimeImmutable());
             $recipe->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($recipe);
             $em->flush();
             $this->addFlash('success', 'La recette a été créée avec succès');
-            return $this->redirectToRoute('recip.index');
+            return $this->redirectToRoute('admin.recip.index');
         }
-        return $this->render('reicipe/create.html.twig', [
+        return $this->render('admin/reicipe/create.html.twig', [
             'controller_name' => 'ReicipeController',
             'form' => $form,
         ]);
     }
 
-    #[Route('/recettes/{id}', name: 'recip.delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function remove(Recipe $recipe, EntityManagerInterface $em)
     {
         $em->remove($recipe);
         $em->flush();
         $this->addFlash('success', 'La recette a été supprimée avec succès');
-        return $this->redirectToRoute('recip.index');
+        return $this->redirectToRoute('admin.recip.index');
     }
 }

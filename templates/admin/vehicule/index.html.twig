@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 {% block title %}Toutes les recettes!
 {% endblock %}
 
@@ -7,7 +7,7 @@
 	<p>Lorem Ipsum
 	</p>
 	<p>
-		<a class="btn btn-primary" href="{{ url('vehicule.create') }}">Créer une nouvelle vehicule</a>
+		<a class="btn btn-primary" href="{{ url('admin.vehicule.create') }}">Créer une nouvelle vehicule</a>
 	</p>
 	<table class='table'>
 		<thead>
@@ -21,11 +21,11 @@
 				{% for vehicule in vehicules %}
 					<tr>
 						<td>
-							<a href="{{ url('vehicule.show', {id: vehicule.id, slug: vehicule.slug}) }}">{{ vehicule.marque }}</a>
+							<a href="{{ url('admin.vehicule.show', {id: vehicule.id, slug: vehicule.slug}) }}">{{ vehicule.marque }}</a>
 						</td>
 						<td>
-							<a class="btn btn-primary" href="{{ url('vehicule.edit', {id: vehicule.id}) }}">Editer</a>
-							<form action="{{ path('vehicule.delete', {id: vehicule.id})}}" method="post" style="display: inline-block">
+							<a class="btn btn-primary" href="{{ url('admin.vehicule.edit', {id: vehicule.id}) }}">Editer</a>
+							<form action="{{ path('admin.vehicule.delete', {id: vehicule.id})}}" method="post" style="display: inline-block">
 								<input type="hidden" name="_method" value="DELETE">
 								<button class="btn btn-danger" type="submit">Supprimer</button>
 							</form>

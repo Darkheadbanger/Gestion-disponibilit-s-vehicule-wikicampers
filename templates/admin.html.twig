@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}Administration!
 			{% endblock %}
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
@@ -19,12 +19,13 @@
 		<nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
 			<div class="navbar bg-body-tertiary">
 				<div class="container-fluide">
+					<a class="navbar-brand {{ app.current_route starts with 'admin.recip.' ? 'active' : '' }}" href="{{ url("admin.recip.index") }}">Administrator</a>
 					{# Href redirection une autre page: ici #}
 					{# Home est  #}
-						<a class="navbar-brand {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ url("home") }}"> Accueil</a>
-					{# <a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.index") }}">Recette</a> #}
+					<a class="navbar-brand {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ url("home") }}">
+						Accueil</a>
 					{# Pour vehicule #}
-					<a class="navbar-brand {{ app.current_route starts with 'vehicule.' ? 'active' : '' }}" href="{{ url("vehicule.index") }}">Vehicule</a>
+					<a class="navbar-brand {{ app.current_route starts with 'admin.vehicule.' ? 'active' : '' }}" href="{{ url("admin.vehicule.index") }}">Vehicule</a>
 					{# <a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.edit") }}">Formulaire</a> #}
 				</div>
 			</div>
