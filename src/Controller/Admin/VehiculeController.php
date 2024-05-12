@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Vehicule;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('/admin/vehicules', name: 'admin.vehicule.')]
 class VehiculeController extends AbstractController
@@ -42,7 +43,7 @@ class VehiculeController extends AbstractController
     }
 
     // Ici la route pour editer un vehicule
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     public function edit(Vehicule $vehicule, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(VehiculeType::class, $vehicule);
@@ -88,7 +89,7 @@ class VehiculeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => Requirement::DIGITS])]
     public function remove(Request $request, Vehicule $vehicule, EntityManagerInterface $em): Response
     {
         $em->remove($vehicule);
