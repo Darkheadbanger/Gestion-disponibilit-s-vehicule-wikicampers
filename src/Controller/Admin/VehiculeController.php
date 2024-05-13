@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Disponibilite;
 use App\Form\VehiculeType;
 use App\Repository\RecipeRepository;
 use App\Repository\VehiculeRepository;
@@ -12,14 +13,37 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Vehicule;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/admin/vehicules', name: 'admin.vehicule.')]
 class VehiculeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(VehiculeRepository $repository): Response
+    public function index(VehiculeRepository $repository, EntityManagerInterface $em): Response
     {
         $vehicules = $repository->findAll();
+        // Créer une nouvelle disponibilité
+        // $disponibilite = new Disponibilite();
+        // $disponibilite->setDateDebut(new \DateTime('now'));
+        // $disponibilite->setDateFin(new \DateTime('+1 day'));
+        // $disponibilite->setPrixParJour(100.00);
+        // $disponibilite->setDisponible(true);
+        // $disponibilite->setSlug('test-disponibilite');
+
+        // // Créer un nouveau véhicule
+        // $vehicule = new Vehicule();
+        // $vehicule->setMarque('Peugeot');
+        // $vehicule->setModele('208');
+        // $vehicule->setSlug('peugeot-208');
+
+        // // Associer la disponibilité au véhicule
+        // $disponibilite->setVehicule($vehicule);
+        // // Persister les entités
+        // $em->persist($vehicule);
+        // $em->persist($disponibilite);
+        // $em->flush();
+
+        // dd($disponibilite->getVehicule());
         return $this->render(
             'admin/vehicule/index.html.twig',
             [
