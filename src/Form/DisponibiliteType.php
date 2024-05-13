@@ -39,6 +39,13 @@ class DisponibiliteType extends AbstractType
             ->add('slug', HiddenType::class, [
                 'required' => false,
             ])
+            ->add('vehicules', EntityType::class, [
+                'class' => Vehicule::class,
+                'choice_label' => 'modele',
+                'multiple' => true,
+                'by_reference' => false,
+                'expanded' => true,
+            ])
             ->add('vehicule', EntityType::class, [
                 'class' => Vehicule::class,
                 'choice_label' => 'id',

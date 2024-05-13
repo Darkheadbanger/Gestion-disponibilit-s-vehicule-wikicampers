@@ -46,6 +46,7 @@ class VehiculeType extends AbstractType
                 'class' => Disponibilite::class,
                 // Vehicule je ne sais pas on verra
                 'choice_label' => 'vehicule',
+                'by_reference' => false, // A voir
                 'expanded' => true,
             ])
             // ->add('createdAt', null, [
