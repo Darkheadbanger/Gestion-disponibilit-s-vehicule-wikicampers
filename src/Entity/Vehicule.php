@@ -29,7 +29,7 @@ class Vehicule
     /**
      * @var Collection<int, Disponibilite>
      */
-    #[ORM\OneToMany(targetEntity: Disponibilite::class, mappedBy: 'vehicule')]
+    #[ORM\OneToMany(targetEntity: Disponibilite::class, mappedBy: 'vehicule', cascade: ['remove'])]
     private Collection $disponibilities;
 
     #[ORM\Column(length: 255)]

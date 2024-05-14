@@ -6,11 +6,13 @@ use App\Entity\Disponibilite;
 use App\Entity\Vehicule;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,44 +24,40 @@ class DisponibiliteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dateDebut', null, [
+            ->add('dateDebut', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('dateFin', null, [
+            ->add('dateFin', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('prixParJour', NumberType::class, [
-                'required' => true,
-                'scale' => 2,
-            ])
-            ->add('isDisponible', CheckboxType::class, [
-                'required' => true,
-                // 'label' => 'Disponible ?',
-            ])
+            ->add('prixParJour', NumberType::class)
             ->add('slug', HiddenType::class, [
                 'required' => false,
             ])
-            ->add('vehicules', EntityType::class, [
-                'class' => Vehicule::class,
-                'choice_label' => 'modele',
-                'multiple' => true,
-                'by_reference' => false,
-                'expanded' => true,
+            // ->add('vehicule', EntityType::class, [
+            //     'class' => Vehicule::class,
+            //     'required' => 'false',
+            //     'choice_label' => function (Vehicule $vehicule) {
+            //         return $vehicule->getMarque() . ' ' . $vehicule->getModele(); // ou tout autre attribut pertinent
+            //     },
+            //     'placeholder' => 'Choisissez un véhicule',
+            //     'empty_data' => null,
+            // ])
+            ->add('isDisponible', CheckboxType::class, [
+                'required' => false,
             ])
-            ->add('vehicule', EntityType::class, [
-                'class' => Vehicule::class,
-                'choice_label' => 'id',
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Envoyer'
-            ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->factory->autoSlug('vehicule'));
+            ->addEventListener(FormEvents::PRE_SUBMIT, $this->factory->autoSlug('dateDebut'));
+
+
     }
+
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Disponibilite::class,
+            'validation_groups' => ['Default', 'Extra']
         ]);
     }
 }

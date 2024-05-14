@@ -16,6 +16,7 @@ class Disponibilite
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    
 
     #[ORM\ManyToOne(inversedBy: 'disponibilities')]
     #[ORM\JoinColumn(nullable: false)]
@@ -35,7 +36,7 @@ class Disponibilite
     private ?float $prixParJour = null;
 
     #[ORM\Column]
-    private ?bool $isDisponible = null;
+    private bool $isDisponible = true;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 3)]
@@ -113,15 +114,14 @@ class Disponibilite
         return $this;
     }
 
-    public function isDisponible(): ?bool
+    public function isDisponible(): bool
     {
         return $this->isDisponible;
     }
 
-    public function setDisponible(bool $isDisponible): static
+    public function setDisponible(bool $isDisponible): self
     {
         $this->isDisponible = $isDisponible;
-
         return $this;
     }
 
@@ -166,4 +166,5 @@ class Disponibilite
 
         return $this;
     }
+    
 }

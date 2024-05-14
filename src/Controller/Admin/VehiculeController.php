@@ -93,20 +93,29 @@ class VehiculeController extends AbstractController
         $vehicule = new Vehicule();
         $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $existingRecipe = $repository->findMarqueAndModele($vehicule->getMarque(), $vehicule->getModele());
-            if ($existingRecipe) {
-                $em->persist($vehicule);
+            // Vérifiez si un véhicule avec la même marque et le même modèle existe déjà
+            $existingVehicule = $repository->findMarqueAndModele($vehicule->getMarque(), $vehicule->getModele());
+            if ($existingVehicule) {
                 $this->addFlash('danger', 'La voiture existe déjà');
                 return $this->redirectToRoute('admin.vehicule.index');
             }
-            // $vehicul->setCreatedAt(new \DateTimeImmutable());
-            // $vehicul->setUpdatedAt(new \DateTimeImmutable());
+
             $em->persist($vehicule);
-            $em->flush();
-            $this->addFlash('success', 'La vehicule a été créée avec succès');
+            $em->flush(); // Persiste le véhicule dans la base de données
+
+            // Now that $vehicule has an ID, we can link it to the Disponibilite
+            $disponibilite = new Disponibilite();
+            $disponibilite->setVehicule($vehicule); // Attache le véhicule à la disponibilité
+            $em->persist($disponibilite);
+
+            $em->flush(); // Persiste toutes les modifications dans la base de données
+
+            $this->addFlash('success', 'Le véhicule et la disponibilité ont été créés avec succès');
             return $this->redirectToRoute('admin.vehicule.index');
         }
+
         return $this->render('admin/vehicule/create.html.twig', [
             'controller_name' => 'VehiculeController',
             'form' => $form,
