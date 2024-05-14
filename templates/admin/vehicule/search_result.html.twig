@@ -1,10 +1,17 @@
 {% extends 'admin.html.twig' %}
 
+{% block title %}Résultats de la recherche{% endblock %}
+
 {% block body %}
     <h1>Résultats de la recherche</h1>
-    <ul>
-        {% for vehicule in vehicules %}
-            <li>{{ vehicule.marque }} {{ vehicule.modele }} - Prix par jour: {{ vehicule.prixParJour }}€</li>
-        {% endfor %}
-    </ul>
+
+    {% if results is not empty %}
+        <ul>
+            {% for vehicule in results %}
+                <li>{{ vehicule.marque }} {{ vehicule.modele }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun résultat trouvé</p>
+    {% endif %}
 {% endblock %}

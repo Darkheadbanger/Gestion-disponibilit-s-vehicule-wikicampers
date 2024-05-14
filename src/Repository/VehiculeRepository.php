@@ -35,6 +35,20 @@ class VehiculeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findByCriteria($dateDebut, $dateFin, $prixParJour)
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->join('v.disponibilities', 'd')
+            ->where('d.dateDebut <= :dateDebut')
+            ->andWhere('d.dateFin >= :dateFin')
+            ->andWhere('d.prixParJour <= :prixParJour')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->setParameter('prixParJour', $prixParJour);
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Vehicule[] Returns an array of Vehicule objects
     //     */

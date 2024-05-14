@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Vehicule;
 use App\Repository\DisponibiliteRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -134,19 +135,37 @@ class VehiculeController extends AbstractController
     }
 
     #[Route('/search', name: 'search')]
-    public function search(Request $request): Response
+    public function search(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
         $results = [];
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $entityManager = $this->container->get('doctrine')->getManager();
-            $results = $entityManager->getRepository(Vehicule::class)->searchByTerm($data['term']);
+            return $this->redirectToRoute('admin.vehicule.search_result', [
+                'dateDebut' => $data->getDateDebut()->format('Y-m-d'),
+                'dateFin' => $data->getDateFin()->format('Y-m-d'),
+                'prix_par_jour' => $data->getPrixParJour()
+            ]);
         }
         return $this->render('admin/vehicule/search.html.twig', [
             'controller_name' => 'VehiculeController',
             'form' => $form,
+            'results' => $results,
+        ]);
+    }
+
+    #[Route('/search/result', name: 'search_result')]
+    public function searchResult(Request $request, VehiculeRepository $vehiculeRepository): Response
+    {
+        $dateDebut = $request->query->get('dateDebut');
+        $dateFin = $request->query->get('dateFin');
+        $prixParJour = $request->query->get('prix_par_jour');
+
+        // Exécuter la logique de recherche en fonction des paramètres
+        $results = $vehiculeRepository->findByCriteria($dateDebut, $dateFin, $prixParJour);
+
+        return $this->render('admin/vehicule/search_result.html.twig', [
             'results' => $results,
         ]);
     }
