@@ -22,13 +22,11 @@ class VehiculeType extends AbstractType
         $builder
             ->add('marque', TextType::class, [
                 'label' => 'Marque de voiture',
+                'empty_data' => 'Toyota',
             ])
             ->add('modele', TextType::class, [
                 'label' => 'Modèle',
             ])
-            ->add('disponibilite', DisponibiliteType::class, [
-                'by_reference' => false, // A voir
-            ]) // Utilisation du formulaire spécifique
             ->add('slug', HiddenType::class, [
                 'required' => false,
             ])

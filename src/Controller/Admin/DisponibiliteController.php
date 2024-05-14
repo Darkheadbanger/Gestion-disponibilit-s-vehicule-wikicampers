@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Disponibilite;
 use App\Form\CategoryType;
+use App\Form\DisponibiliteType;
 use App\Repository\DisponibiliteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,11 +25,11 @@ class DisponibiliteController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/create', name: 'create')]
+    #[Route(path: '/create/{id}', name: 'create')]
     public function create(Request $request, EntityManagerInterface $em)
     {
         $disponibilite = new Disponibilite();
-        $form = $this->createForm(CategoryType::class, $disponibilite);
+        $form = $this->createForm(DisponibiliteType::class, $disponibilite);
         $form->handleRequest($request); // Pass the Request object here
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($disponibilite);

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Disponibilite;
 use App\Form\VehiculeType;
+use App\Form\SearchType;
 use App\Repository\RecipeRepository;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Vehicule;
+use App\Repository\DisponibiliteRepository;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -19,7 +21,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 class VehiculeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(VehiculeRepository $repository, EntityManagerInterface $em): Response
+    public function index(VehiculeRepository $repository, EntityManagerInterface $em, DisponibiliteRepository $repositoryDisponibilite): Response
     {
         $vehicules = $repository->findAll();
         // Créer une nouvelle disponibilité
@@ -91,6 +93,7 @@ class VehiculeController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em, VehiculeRepository $repository): Response
     {
         $vehicule = new Vehicule();
+        $disponibilite = new Disponibilite();
         $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
 
@@ -101,7 +104,6 @@ class VehiculeController extends AbstractController
                 $this->addFlash('danger', 'La voiture existe déjà');
                 return $this->redirectToRoute('admin.vehicule.index');
             }
-
             $em->persist($vehicule);
             $em->flush(); // Persiste le véhicule dans la base de données
 
@@ -129,5 +131,23 @@ class VehiculeController extends AbstractController
         $em->flush();
         $this->addFlash('success', 'La recette a été supprimée avec succès');
         return $this->redirectToRoute('admin.vehicule.index');
+    }
+
+    #[Route('/search', name: 'search')]
+    public function search(Request $request): Response
+    {
+        $form = $this->createForm(SearchType::class);
+        $form->handleRequest($request);
+        $results = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $entityManager = $this->container->get('doctrine')->getManager();
+            $results = $entityManager->getRepository(Vehicule::class)->searchByTerm($data['term']);
+        }
+        return $this->render('admin/vehicule/search.html.twig', [
+            'controller_name' => 'VehiculeController',
+            'form' => $form,
+            'results' => $results,
+        ]);
     }
 }

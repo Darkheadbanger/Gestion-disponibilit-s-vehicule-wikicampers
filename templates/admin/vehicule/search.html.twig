@@ -1,0 +1,17 @@
+{% extends 'admin.html.twig' %}
+
+{% block title "Search un nouveau vehicule "  %}
+
+
+{% block body %}
+	<h1>Chercher une disponibilitée</h1>
+
+		{{ form_start(form) }}
+	<div class="d-flex flex-column">
+		{{ form_row(form.dateDebut) }}
+		{{ form_row(form.dateFin) }}
+		{{ form_row(form.prix_par_jour) }}
+	</div>
+	{{ form_end(form) }}
+
+	{% endblock %}

@@ -7,7 +7,7 @@
 	<p>Lorem Ipsum
 	</p>
 	<p>
-		<a class="btn btn-primary" href="{{ url('admin.vehicule.create') }}">Créer une nouvelle vehicule</a>
+		<a class="btn btn-primary" href="{{ url('admin.vehicule.create') }}">Créer un nouveau vehicule</a>
 	</p>
 	<table class='table'>
 		<thead>
@@ -19,23 +19,28 @@
 		<tbody>
 			<ul>
 				{% for vehicule in vehicules %}
-					<tr>
-						<td>
-							<a href="{{ url('admin.vehicule.show', {id: vehicule.id, slug: vehicule.slug}) }}">{{ vehicule.marque }}</a>
-						</td>
-						<td>
-							<a class="btn btn-primary" href="{{ url('admin.vehicule.edit', {id: vehicule.id}) }}">Editer</a>
-							
-							
-							{# <a class="btn btn-secondary {{ app.current_route starts with 'admin.disponibilite.' ? 'active' : '' }}" href="{{ url("admin.disponibilite.create") }}">Disponibilite</a> #}
-							
-							
-							<form action="{{ path('admin.vehicule.delete', {id: vehicule.id})}}" method="post" style="display: inline-block">
-								<input type="hidden" name="_method" value="DELETE">
-								<button class="btn btn-danger" type="submit">Supprimer</button>
-							</form>
-						</td>
-					</tr>
+						<tr>
+							<td>
+								<a href="{{ url('admin.vehicule.show', {id: vehicule.id, slug: vehicule.slug}) }}">{{ vehicule.marque }} {{vehicule.modele}}</a>
+									{% for disponibilite in vehicule.disponibilities %}
+										<p>Date début: {{ disponibilite.dateDebut ? disponibilite.dateDebut|date('d-m-Y') : 'N/A' }}</p>
+										<p>Date fin: {{ disponibilite.dateFin ? disponibilite.dateFin|date('d-m-Y') : 'N/A' }}</p>
+										<p>Prix par jour: {{ disponibilite.prixParJour }} EUR</p>
+									{% endfor %}
+							</td>
+							<td>
+								<a class="btn btn-primary" href="{{ url('admin.vehicule.edit', {id: vehicule.id}) }}">Editer</a>
+								
+								
+								<a class="btn btn-secondary {{ app.current_route starts with 'admin.disponibilite.' ? 'active' : '' }}" href="{{ url("admin.disponibilite.create", {id: vehicule.id}) }}">Disponibilité</a>
+								
+								
+								<form action="{{ path('admin.vehicule.delete', {id: vehicule.id})}}" method="post" style="display: inline-block">
+									<input type="hidden" name="_method" value="DELETE">
+									<button class="btn btn-danger" type="submit">Supprimer</button>
+								</form>
+							</td>
+						</tr>
 				{% endfor %}
 			</ul>
 		</tbody>

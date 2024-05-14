@@ -16,16 +16,15 @@ class Disponibilite
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    
+
 
     #[ORM\ManyToOne(inversedBy: 'disponibilities')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Vehicule $vehicule = null;
+    private ?Vehicule $vehicule = null; // Ici jamais null
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDebut = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+#[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column]
@@ -71,6 +70,9 @@ class Disponibilite
 
     public function setVehicule(?Vehicule $vehicule): static
     {
+        if (!$vehicule) {
+            throw new \InvalidArgumentException("Un véhicule doit être fourni.");
+        }
         $this->vehicule = $vehicule;
 
         return $this;
@@ -145,26 +147,25 @@ class Disponibilite
         return $this->vehicules;
     }
 
-    public function addVehicule(Vehicule $vehicule): static
-    {
-        if (!$this->vehicules->contains($vehicule)) {
-            $this->vehicules->add($vehicule);
-            $vehicule->setDisponibilite($this);
-        }
+    // public function addVehicule(Vehicule $vehicule): static
+    // {
+    //     if (!$this->vehicules->contains($vehicule)) {
+    //         $this->vehicules->add($vehicule);
+    //         $vehicule->setDisponibilite($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeVehicule(Vehicule $vehicule): static
-    {
-        if ($this->vehicules->removeElement($vehicule)) {
-            // set the owning side to null (unless already changed)
-            if ($vehicule->getDisponibilite() === $this) {
-                $vehicule->setDisponibilite(null);
-            }
-        }
+    // public function removeVehicule(Vehicule $vehicule): static
+    // {
+    //     if ($this->vehicules->removeElement($vehicule)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($vehicule->getDisponibilite() === $this) {
+    //             $vehicule->setDisponibilite(null);
+    //         }
+    //     }
 
-        return $this;
-    }
-    
+    //     return $this;
+    // }
 }

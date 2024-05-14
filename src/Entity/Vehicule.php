@@ -39,9 +39,6 @@ class Vehicule
     )]
     private ?string $slug = "";
 
-    #[ORM\ManyToOne(inversedBy: 'vehicules', cascade: ['persist'])]
-    private ?Disponibilite $disponibilite = null;
-
     public function __construct()
     {
         $this->disponibilities = new ArrayCollection();
@@ -50,6 +47,11 @@ class Vehicule
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
     public function getMarque(): ?string
@@ -118,15 +120,4 @@ class Vehicule
         return $this;
     }
 
-    public function getDisponibilite(): ?Disponibilite
-    {
-        return $this->disponibilite;
-    }
-
-    public function setDisponibilite(?Disponibilite $disponibilite): static
-    {
-        $this->disponibilite = $disponibilite;
-
-        return $this;
-    }
 }
