@@ -108,13 +108,6 @@ class VehiculeController extends AbstractController
             $em->persist($vehicule);
             $em->flush(); // Persiste le véhicule dans la base de données
 
-            // Now that $vehicule has an ID, we can link it to the Disponibilite
-            $disponibilite = new Disponibilite();
-            $disponibilite->setVehicule($vehicule); // Attache le véhicule à la disponibilité
-            $em->persist($disponibilite);
-
-            $em->flush(); // Persiste toutes les modifications dans la base de données
-
             $this->addFlash('success', 'Le véhicule et la disponibilité ont été créés avec succès');
             return $this->redirectToRoute('admin.vehicule.index');
         }

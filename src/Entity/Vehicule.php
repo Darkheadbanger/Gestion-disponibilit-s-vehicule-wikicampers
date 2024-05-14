@@ -49,9 +49,10 @@ class Vehicule
         return $this->id;
     }
 
-    public function setId($id): void
+    public function setId($id): self
     {
         $this->id = $id;
+        return $this;
     }
 
     public function getMarque(): ?string

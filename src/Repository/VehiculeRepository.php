@@ -26,7 +26,7 @@ class VehiculeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findId(int $id)
+    public function findVehiculeId(int $id)
     {
         return $this->createQueryBuilder('v')
             ->where('v.id = :id')
