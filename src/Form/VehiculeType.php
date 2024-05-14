@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Form\DisponibiliteType;
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -14,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class VehiculeType extends AbstractType
 {
+    // Initialise la classe avec une instance de FormListenerFactory, utilisée pour la méthode autoSlug
     public function __construct(private FormListenerFactory $factory)
     {
     }

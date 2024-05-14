@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;  // Importez cet
 
 class DisponibiliteType extends AbstractType
 {
+    // Initialise la classe avec une instance de FormListenerFactory, utilisée pour la méthode autoSlug
     public function __construct(private FormListenerFactory $factory)
     {
     }
