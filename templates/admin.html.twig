@@ -19,18 +19,12 @@
 		<nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
 			<div class="navbar bg-body-tertiary">
 				<div class="container-fluide">
-					<a class="navbar-brand {{ app.current_route starts with 'admin.recip.' ? 'active' : '' }}" href="{{ url("admin.recip.index") }}">Administrator</a>
 					
 					<a class="navbar-brand {{ app.current_route starts with 'admin.vehicule.' ? 'active' : '' }}" href="{{ url("admin.vehicule.search") }}">Search</a>
-					{# Il faut voir sur le controller #}
 					
-					{# Href redirection une autre page: ici #}
-					{# Home est  #}
 					<a class="navbar-brand {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ url("home") }}">
 						Accueil</a>
-					{# Pour vehicule #}
 					<a class="navbar-brand {{ app.current_route starts with 'admin.vehicule.' ? 'active' : '' }}" href="{{ url("admin.vehicule.index") }}">Vehicule</a>
-					{# <a class="navbar-brand {{ app.current_route starts with 'recip.' ? 'active' : '' }}" href="{{ url("recip.edit") }}">Formulaire</a> #}
 
 				</div>
 			</div>

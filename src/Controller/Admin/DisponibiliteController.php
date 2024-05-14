@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Disponibilite;
-use App\Form\CategoryType;
 use App\Form\DisponibiliteType;
 use App\Repository\DisponibiliteRepository;
 use App\Repository\VehiculeRepository;
@@ -11,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('/admin/disponibilite', name: 'admin.disponibilite.')]
 class DisponibiliteController extends AbstractController

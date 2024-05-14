@@ -22,41 +22,5 @@ class CategoryType extends AbstractType
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'La catégorie',
-                // Label est optionnel. Par defaut, title
-                'empty_data' => '',
-            ])
-            ->add('slug', HiddenType::class, [
-                'required' => false,
-            ])
-            ->add('recipes', EntityType::class, [
-                'class' => Recipe::class,
-                'choice_label' => 'title',
-                'multiple' => true,
-                'by_reference' => false,
-                'expanded' => true,
-            ])
-            // ->add('createdAt', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('updatedAt', null, [
-            //     'widget' => 'single_text',
-            // ]);
-            ->add('save', SubmitType::class, [
-                'label' => 'Envoyer'
-            ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->factory->autoSlug('name'))
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->factory->timestamp());
-    }
-
-
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Category::class,
-        ]);
     }
 }
